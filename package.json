@@ -5,12 +5,10 @@
   "devDependencies": {
     "browserify": "^14.5.0",
     "browserify-shim": "^3.8.14",
-    "chai": "^4.1.2",
     "classnames": "^2.2.5",
     "connect": "^3.6.5",
     "create-react-class": "^15.6.2",
     "envify": "^4.1.0",
-    "greyhound.js": "0.0.8",
     "gulp": "^3.9.1",
     "gulp-awspublish": "^3.3.0",
     "gulp-browserify": "^0.5.1",
@@ -30,7 +28,6 @@
     "gulp-watch": "^4.3.11",
     "jshint": "^2.9.5",
     "jshint-jsx": "^0.5.0",
-    "mochify": "^4.0.0",
     "morgan": "^1.9.0",
     "mori": "^0.3.2",
     "open": "0.0.5",
@@ -39,9 +36,6 @@
     "react-dom": "^16.2.0",
     "reactify": "^1.1.1",
     "serve-static": "^1.13.1"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",

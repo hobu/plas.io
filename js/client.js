@@ -1,5 +1,4 @@
 // client.js
-// Client side stuffs for greyhound web viewer
 //
 
 // Import all modules here even if we don't want to use them

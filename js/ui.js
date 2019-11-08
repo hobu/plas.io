@@ -14,8 +14,6 @@ var Promise = require("bluebird"),
     controls = require('./controls');
     withRefresh = require('./util').withRefresh;
     util = require('./util');
-    greyhound = require("greyhound.js");
-    gh = require('./gh-loader');
 
     require("jqueryui");
     require("jquery-layout");
@@ -198,37 +196,6 @@ var Promise = require("bluebird"),
         return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     };
 
-    var getGreyhound = function(comps, cb) {
-        console.log("Getting greyhound pipeline, connection components:", comps);
-        return new Promise(function(resolve, reject) {
-            var reader = new greyhound.GreyhoundReader(comps.server);
-            reader.createSession(comps.pipelineId, function(err, sessionId) {
-                if (err) return reject(err);
-
-                var schema = greyhound.Schema.standard();
-
-                var e = reader.read(sessionId, {
-                    schema: schema
-                }, function(err, data) {
-                    if (err) return reject(err);
-                    reader.destroy(sessionId, function() {});
-                    reader.close();
-
-                    resolve(new gh.GHLoader(data.data, data.numPoints, schema));
-                });
-
-                var total = 0;
-                e.on("begin", function(data) {
-                    total = data.numBytes;
-                });
-
-                e.on("read", function(data) {
-                    cb(data.sofar / total, data.sofar);
-                });
-            });
-        });
-    };
-
     var getBinary = function(url, cb) {
         var oReq = new XMLHttpRequest();
         return new Promise(function(resolve, reject) {
@@ -331,10 +298,6 @@ var Promise = require("bluebird"),
             cancellableLoad(getBinary, [e.url], e.name);
         });
 
-        $(document).on("plasio.loadfiles.greyhound", function(e) {
-            cancellableLoad(getGreyhound, e.comps, "Greyhound Pipeline");
-        });
-
         $(document).on("plasio.load.started", function() {
             scope.stopAllPlayback();
             $.event.trigger({
@@ -349,7 +312,6 @@ var Promise = require("bluebird"),
 
             $("#loadError").html("").hide();
             $("#browse button").attr("disabled", true);
-            $("#gh-container").hide();
             $("#browse").hide();
             $("#browseCancel").show();
 
@@ -372,7 +334,6 @@ var Promise = require("bluebird"),
             $("#browseCancel").hide();
             $("#browse button").attr("disabled", false);
             $("#browse").show();
-            $("#gh-container").show();
             fileLoadInProgress = false;
         };
 
@@ -649,9 +610,6 @@ var Promise = require("bluebird"),
                 name: name
             });
         }));
-
-        // TODO: May be enable again one day?
-        //ReactDOM.render(<controls.openGreyhoundPipelineButton />, $("#openGreyhoundButton").get(0));
     };
 
     var cancellableLoad = function(fDataLoader, files, name) {
@@ -856,7 +814,7 @@ var Promise = require("bluebird"),
 		    else {
 			    $credits.hide();
 		    }
-		    
+
 		    console.log(credits);
 	    };
 
