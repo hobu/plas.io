@@ -1,21 +1,19 @@
 //gulp &  plugins
 var gulp = require('gulp');
 
+var awspublish = require('gulp-awspublish');
+var browserify = require('gulp-browserify');
+var clean = require('gulp-clean');
+var colors = require('ansi-colors')
+var concat = require('gulp-concat');
+var htmlreplace = require('gulp-html-replace');
+var fancylog = require('fancy-log')
 var jshint = require('gulp-jshint');
 var less = require('gulp-less');
-var concat = require('gulp-concat');
-var uglify = require('gulp-uglify');
-var rename = require('gulp-rename');
-var browserify = require('gulp-browserify');
-var nodemon = require('gulp-nodemon');
-var gutil = require('gulp-util');
-var watch = require('gulp-watch');
 var livereload = require('gulp-livereload');
-var clean = require('gulp-clean');
-var awspublish = require('gulp-awspublish');
-var uglify = require('gulp-uglify');
-var htmlreplace = require('gulp-html-replace');
+var nodemon = require('gulp-nodemon');
 var react = require('gulp-react');
+var watch = require('gulp-watch');
 
 var connect = require('connect');
 var http = require('http');
@@ -95,7 +93,7 @@ gulp.task('lint', function (){
 });
 
 var startServer = function(path, cb) {
-    var devApp, devServer, devAddress, devHost, url, log=gutil.log, colors=gutil.colors;
+    var devApp, devServer, devAddress, devHost, url, log=fancylog;
     devApp = connect();
     devApp.use(logger());
     devApp.use(serveStatic(path));
@@ -154,8 +152,7 @@ gulp.task('bad-scripts', function() {
 gulp.task('build-specs', function(){
     return gulp.src([paths.specs])
     .pipe(browserify())
-    .on("error", gutil.log)
-    .on("error", gutil.beep)
+    .on("error", fancylog)
     .pipe(gulp.dest("test/build"));
 });
 
@@ -171,8 +168,7 @@ gulp.task('scripts', function(){
         debug: gulp.env.production,
         transform: ['reactify']
     }))
-    .on("error", gutil.log)
-    .on("error", gutil.beep)
+    .on("error", fancylog)
     .pipe(gulp.dest(paths.build));
 });
 
